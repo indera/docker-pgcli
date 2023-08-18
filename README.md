@@ -25,6 +25,11 @@ t push
 
 ```bash
 t pg
+
+docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS                     NAMES
+3001c4efcef1   postgres:14-alpine   "docker-entrypoint.s…"   16 minutes ago   Up 16 minutes   0.0.0.0:60808->5432/tcp   pg-test
+
 t db
 
 task: [db] docker run -it --rm --name=pgcli --network=pg_net -e DB_URL=postgres://pg:password@pg-test indera/pgcli
@@ -34,6 +39,8 @@ Version: 3.5.0
 Home: http://pgcli.com
 pg@pg-test:pg>
 ```
+
+> Note: we did not specify the port `60808`, instead, we used the `--network` and host `pg-test`
 
 
 # References
