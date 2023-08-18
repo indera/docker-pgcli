@@ -18,26 +18,6 @@ tasks:
       - docker network create pg_net
       - docker run -it --rm --name=pg-test -p 5432 --network=pg_net -e POSTGRES_USER=pg -e POSTGRES_PASSWORD=password -d postgres:14-alpine
 
----
-version: "3"
-
-tasks:
-  default:
-    cmds:
-      - task --list --sort none
-
-  postgres:
-    desc: Run postgres
-    aliases: [pg]
-    ignore_error: true
-    cmds:
-      # This works when the port is exposed
-      #   PGPASSWORD=password psql -U pg -h localhost -p 5432
-      # - docker run -it --rm --name=pg-test -p 0.0.0.0:5432:5432/tcp -e POSTGRES_USER=pg -e POSTGRES_PASSWORD=password -d postgres:14-alpine
-      # - docker run -it --rm --name=pg-test --expose 5432 -e POSTGRES_USER=pg -e POSTGRES_PASSWORD=password -d postgres:14-alpine
-      - docker network create pg_net
-      - docker run -it --rm --name=pg-test -p 5432 --network=pg_net -e POSTGRES_USER=pg -e POSTGRES_PASSWORD=password -d postgres:14-alpine
-
   db:
     desc: Connect to postgres
     cmds:
@@ -59,26 +39,3 @@ tasks:
     desc: Push pgcli image to hub.docker.com
     cmds:
       - docker image push indera/pgcli
-
-  db:
-    desc: Connect to postgres
-    cmds:
-      - >-
-        docker run -it --rm --name=pgcli --network=pg_net
-        -e DB_URL=postgres://pg:password@pg-test
-        indera/pgcli
-
-  build:image:
-    desc: Build the image for https://hub.docker.com/r/indera/pgcli
-    aliases: [b]
-    cmds:
-      # docker login -u indera
-      # see ~/.docker/config.json
-      - docker build -t pgcli:latest .
-      - docker image tag pgcli:latest indera/pgcli:latest
-
-  push:image:
-    desc: Push pgcli image to hub.docker.com
-    cmds:
-      - docker image push indera/pgcli
-
