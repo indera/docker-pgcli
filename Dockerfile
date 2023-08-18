@@ -1,4 +1,4 @@
-FROM python:3.12.0-slim
+FROM python:3.11-slim
 
 MAINTAINER Andrei Sura <sura.andrei@gmail.com>
 
@@ -7,8 +7,13 @@ RUN apt-get -y update && \
   
 RUN pip install pgcli
 
-ADD pgcli.sh /bin/pgcli.sh
+RUN useradd -ms /bin/bash app
 
+WORKDIR /app
+COPY --chown=app:app pgcli.sh .
+RUN chmod +x pgcli.sh
+
+USER app
 ENV PAGER=less
-ENTRYPOINT ["pgcli.sh"]
-
+# ENTRYPOINT ["sleep", "10000"]
+ENTRYPOINT ["/app/pgcli.sh"]

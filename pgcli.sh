@@ -11,7 +11,7 @@ usage() {
     echo "1. Directly pass the database url:"
     echo "   docker run -it --rm indera/pgcli postgres://DBUSER:DBPASS@DBHOST:DBPORT"
     echo ""
-    echo "2. Pass an environment variable via docker's '-e' argument"
+    echo "2. Pass an environment variable via docker's '-e' argument:"
     echo "   docker run -it --rm -e DB_URL=postgres://DBUSER:DBPASS@DBHOST:DBPORT indera/pgcli"
     echo ""
     echo "3. Automatically connect via a linked postgres container:"
